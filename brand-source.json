@@ -1,0 +1,27 @@
+{
+  "source": "https://www.newdawn-horticultural.com/",
+  "theme_color": "#005b5b",
+  "images": [
+    {
+      "file": "assets/brand/logo.png",
+      "url": "https://storage.e.jimdo.com/cdn-cgi/image/quality=85,fit=scale-down,format=auto,trim=0;0;0;0,width=640,height=634/image/520480055/062c3694-1dae-4e1e-bdce-bef928257784.png",
+      "width": 640,
+      "height": 634,
+      "bytes": 62219
+    },
+    {
+      "file": "assets/brand/forest.jpg",
+      "url": "https://storage.e.jimdo.com/cdn-cgi/image/quality=85,fit=scale-down,format=auto,trim=0;955;0;534,width=1345,height=1600/image/519864207/a8e40415-098b-47ab-a8d6-e64e6e19d20a.jpg",
+      "width": 1345,
+      "height": 1599,
+      "bytes": 634362
+    },
+    {
+      "file": "assets/brand/favicon.png",
+      "url": "https://storage.e.jimdo.com/cdn-cgi/image/quality=85,fit=cover,format=auto,width=32,height=32/image/520480055/062c3694-1dae-4e1e-bdce-bef928257784.png",
+      "width": 32,
+      "height": 32,
+      "bytes": 1063
+    }
+  ]
+}

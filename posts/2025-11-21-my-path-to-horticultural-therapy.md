@@ -6,13 +6,19 @@
   "category": "column",
   "author": "杉林",
   "description": "祖父の庭、農業高校、そして大学へ。園芸療法士をめざした原点を綴ります。",
-  "source_url": "https://www.newdawn-horticultural.com/%E6%B4%BB%E5%8B%95%E5%A0%B1%E5%91%8A/2025%E5%B9%B4%E5%BA%A6/11-21-%E7%A7%81%E3%81%8C%E5%9C%92%E8%8A%B8%E7%99%82%E6%B3%95%E5%A3%AB%E3%81%AB%E3%81%AA%E3%82%8B%E3%81%BE%E3%81%A7/"
+  "source_url": "https://www.newdawn-horticultural.com/%E6%B4%BB%E5%8B%95%E5%A0%B1%E5%91%8A/2025%E5%B9%B4%E5%BA%A6/11-21-%E7%A7%81%E3%81%8C%E5%9C%92%E8%8A%B8%E7%99%82%E6%B3%95%E5%A3%AB%E3%81%AB%E3%81%AA%E3%82%8B%E3%81%BE%E3%81%A7/",
+  "cover_image": "assets/images/my-path-to-horticultural-therapy-01.jpg",
+  "cover_alt": "花壇で土と植物に触れて作業する様子"
 }
 ---
 
 はじめまして。
 団体代表の杉林(すぎばやし )です。
 今回は、なぜ私が「園芸療法士」という道を選んだのか、その原点のようなお話を、綴っていこうと思います。
+
+![花壇で土と植物に触れて作業する様子](assets/images/my-path-to-horticultural-therapy-01.jpg)
+
+![草花が咲く花壇の写真](assets/images/my-path-to-horticultural-therapy-02.jpg)
 
 
 と言うことで、「私が園芸療法士になるまで」をお届けします！
@@ -45,6 +51,8 @@
 自分がその「園芸療法」を仕事にするなんて、
 まったく想像もしていませんでした。
 
+![枝を切る作業の様子](assets/images/my-path-to-horticultural-therapy-03.jpg)
+
 ## 園芸の先生としての訪問先で
 
 転機が訪れたのは、その少しあとです。
@@ -56,6 +64,10 @@
 その体験が、
 「園芸療法士になりたい」
 そう思うきっかけになりました。
+
+![植物のそばでの園芸作業の様子](assets/images/my-path-to-horticultural-therapy-04.jpg)
+
+![花壇で植物を手入れする様子](assets/images/my-path-to-horticultural-therapy-05.jpg)
 ## 農大で「園芸療法士」をめざす
 
 園芸療法のことをもっと学びたい。植物の力を、人の心や生活の支えにつなげる仕事がしたい。
@@ -66,6 +78,8 @@
 一緒に土を触り、花を植え、季節を感じる時間を過ごす中で、「園芸療法士」という仕事が、少しずつ自分の中で“夢”から“現実”へと変わっていきました。
 そしてついに、資格を取得し、実習先だった精神科病院に「園芸療法士」として就職しました。
 こうして、田舎で自然の中を走り回っていたひとりの少年は、園芸療法士という道を歩みはじめたのです。。。
+
+![草花のそばで苗を手に持つ様子](assets/images/my-path-to-horticultural-therapy-06.jpg)
 
 長くなりましたが、これが私が園芸療法士になるまでのお話です、、、！
 ここまで読んでくださり、ありがとうございます。

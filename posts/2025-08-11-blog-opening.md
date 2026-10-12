@@ -6,12 +6,16 @@
   "category": "activity",
   "author": "竹原",
   "description": "New Dawnの活動や想いを届けるブログを開設しました。",
-  "source_url": "https://www.newdawn-horticultural.com/%E6%B4%BB%E5%8B%95%E5%A0%B1%E5%91%8A/2025%E5%B9%B4%E5%BA%A6/08-11-%E3%83%96%E3%83%AD%E3%82%B0%E3%83%9A%E3%83%BC%E3%82%B8%E9%96%8B%E8%A8%AD/"
+  "source_url": "https://www.newdawn-horticultural.com/%E6%B4%BB%E5%8B%95%E5%A0%B1%E5%91%8A/2025%E5%B9%B4%E5%BA%A6/08-11-%E3%83%96%E3%83%AD%E3%82%B0%E3%83%9A%E3%83%BC%E3%82%B8%E9%96%8B%E8%A8%AD/",
+  "cover_image": "assets/images/blog-opening-01.jpg",
+  "cover_alt": "ピンク色のバラが咲く庭の写真"
 }
 ---
 
 ブログページを作成いたしました。
 今後、こちらのページでも活動内容を報告いたします。
+
+![ピンク色のバラが咲く庭の写真](assets/images/blog-opening-01.jpg)
 
 "園芸療法 × 幸福学"
 

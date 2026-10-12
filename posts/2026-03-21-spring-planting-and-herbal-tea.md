@@ -6,12 +6,18 @@
   "category": "activity",
   "author": "",
   "description": "春の寄せ植えとハーブティー。植物を選び、育て、五感で味わう時間を届けます。",
-  "source_url": "https://www.newdawn-horticultural.com/%E6%B4%BB%E5%8B%95%E5%A0%B1%E5%91%8A/2026%E5%B9%B4%E5%BA%A6/3-21-%E8%A8%AA%E5%95%8F%E5%9C%92%E8%8A%B8%E7%99%82%E6%B3%95%E3%82%92%E5%AE%9F%E6%96%BD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F/"
+  "source_url": "https://www.newdawn-horticultural.com/%E6%B4%BB%E5%8B%95%E5%A0%B1%E5%91%8A/2026%E5%B9%B4%E5%BA%A6/3-21-%E8%A8%AA%E5%95%8F%E5%9C%92%E8%8A%B8%E7%99%82%E6%B3%95%E3%82%92%E5%AE%9F%E6%96%BD%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F/",
+  "cover_image": "assets/images/spring-planting-and-herbal-tea-01.jpg",
+  "cover_alt": "パンジーなど春の草花を使った寄せ植え"
 }
 ---
 
 春の園芸療法プログラム
 -春の寄せ植えとハーブティーの時間-
+
+![パンジーなど春の草花を使った寄せ植え](assets/images/spring-planting-and-herbal-tea-01.jpg)
+
+![春の草花を鉢に植え込む作業](assets/images/spring-planting-and-herbal-tea-02.jpg)
 
 春分に近い時期にあわせて、春の寄せ植えとハーブティーを楽しむ園芸療法プログラムを実施しました!
 会場に並べた草花を前に、お客様から「まあ綺麗なお花！」「すごく楽しみにしていたの！」といった声が自然とこぼれ、活動が始まる前から、花への期待や喜びが広がっていました!
@@ -23,7 +29,13 @@
 一つひとつの過程には、自分なりに試してみようとする主体性が、自然と作業に表れていると感じます。
 完成が近づくと、「これから〇〇に飾ろう！」「手入れはどうしたらいい？」といった声や出来上がった作品をこれからの生活の中でどう活かしていくかを思い描く様子が見られました。
 
+![土と草花を使った寄せ植えの作業](assets/images/spring-planting-and-herbal-tea-03.jpg)
+
 植物との関わりがその場で終わるのではなく、日常へとつながっていく広がりが感じられます！
+
+![活動で用意したハーブの葉や枝](assets/images/spring-planting-and-herbal-tea-04.jpg)
+
+![花壇に芽吹いた植物の写真](assets/images/spring-planting-and-herbal-tea-05.jpg)
 ## 作業の後は、お茶会！
 
 活動後のお茶会では、ハーブティーを試飲！
@@ -40,5 +52,7 @@
 エネルギーを奪われた疲れではなく、「使い切った心地よい疲れ」だからこそ、お茶が美味しく感じられる。とても価値のある時間になったと感じました。
 NewDawnでは、こうした一つひとつの体験の中に現れる変化や言葉を丁寧に捉え、園芸療法の価値として積み重ねていくことを大切にしています。
 今後も、こうした実践を通して、園芸療法の可能性を探求し続けていきたいと思います。
+
+![春の寄せ植えを作る活動の様子](assets/images/spring-planting-and-herbal-tea-06.jpg)
 
 次回もお楽しみに！

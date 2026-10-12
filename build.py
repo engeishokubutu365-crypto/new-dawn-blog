@@ -19,14 +19,17 @@ args_parser.add_argument('--preview', action='store_true')
 args = args_parser.parse_args()
 SITE = args.site_url.rstrip('/')
 H = html.escape
+PHOTO_METADATA = {p['file']: p for p in json.loads((ROOT/'photo-migration.json').read_text())} if (ROOT/'photo-migration.json').exists() else {}
 
 def inline(text):
     value = H(text)
     def image(match):
         source = html.unescape(match[2])
+        meta = PHOTO_METADATA.get(source, {})
+        dimensions = f' width="{meta["width"]}" height="{meta["height"]}"' if meta else ''
         if source.startswith('assets/'):
             source = '../../' + source
-        return f'<img src="{H(source, quote=True)}" alt="{match[1]}" loading="lazy">'
+        return f'<img src="{H(source, quote=True)}" alt="{match[1]}"{dimensions} loading="lazy" decoding="async">'
     value = re.sub(r'!\[([^\]]*)\]\((https?://[^\s)]+|assets/[^\s)]+)\)', image, value)
     value = re.sub(r'\[([^\]]+)\]\((https?://[^\s)]+)\)', lambda m: f'<a href="{H(html.unescape(m[2]), quote=True)}">{m[1]}</a>', value)
     return re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', value)
@@ -36,7 +39,10 @@ def markdown(text):
     out, paragraph, listing = [], [], None
     def flush():
         if paragraph:
-            out.append('<p>' + '<br>'.join(inline(s) for s in paragraph) + '</p>')
+            if len(paragraph)==1 and re.fullmatch(r'!\[[^\]]*\]\((?:https?://[^\s)]+|assets/[^\s)]+)\)',paragraph[0]):
+                out.append('<figure class="article-photo">' + inline(paragraph[0]) + '</figure>')
+            else:
+                out.append('<p>' + '<br>'.join(inline(s) for s in paragraph) + '</p>')
             paragraph.clear()
     def close_list():
         nonlocal listing
@@ -108,19 +114,24 @@ def document(title, description, content, prefix='.', path='', active='all', art
     if article and canonical:
         schema = {'@context': 'https://schema.org', '@type': 'BlogPosting', 'headline': article['title'], 'description': article['description'], 'datePublished': article['date'], 'mainEntityOfPage': canonical, 'publisher': {'@type':'Organization','name':'New Dawn','url':MAIN}}
         if article['author']: schema['author'] = {'@type':'Person','name':article['author']}
+        if article.get('cover_image'):
+            schema['image'] = SITE + '/' + article['cover_image']
         structured = '<script type="application/ld+json">'+json.dumps(schema,ensure_ascii=False).replace('<','\\u003c')+'</script>'
+    social_image = (article or posts[0]).get('cover_image')
+    if social_image and SITE:
+        meta += '<meta property="og:image" content="'+H(SITE+'/'+social_image,quote=True)+'">'
     preview = '<div class="preview-notice">移行プレビュー <span>既存記事を引き継いだ確認用ブログです</span></div>' if args.preview else ''
     return f'''<!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{H(title)}｜New Dawn</title><meta name="description" content="{H(description, quote=True)}">
-<meta name="theme-color" content="#285944"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:title" content="{H(title, quote=True)}｜New Dawn"><meta property="og:description" content="{H(description, quote=True)}"><meta property="og:locale" content="ja_JP"><meta property="og:site_name" content="New Dawn ブログ">
-{meta}<link rel="icon" href="{prefix}/assets/mark.svg" type="image/svg+xml"><link rel="stylesheet" href="{prefix}/assets/style.css"><script src="{prefix}/assets/app.js" defer></script>{structured}</head>
+<meta name="theme-color" content="#005b5b"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:title" content="{H(title, quote=True)}｜New Dawn"><meta property="og:description" content="{H(description, quote=True)}"><meta property="og:locale" content="ja_JP"><meta property="og:site_name" content="New Dawn ブログ">
+{meta}<link rel="icon" href="{prefix}/assets/brand/favicon.png" type="image/png"><link rel="apple-touch-icon" href="{prefix}/assets/brand/logo.png"><link rel="stylesheet" href="{prefix}/assets/style.css"><script src="{prefix}/assets/app.js" defer></script>{structured}</head>
 <body><a class="skip-link" href="#main">本文へ進む</a>{preview}<header class="site-header"><div class="header-inner">
-<a class="brand" href="{route(prefix,'')}" aria-label="New Dawn ブログのトップ"><img src="{prefix}/assets/mark.svg" alt="" width="42" height="42"><span>New Dawn<small>園芸療法 × 幸福学</small></span></a>
+<a class="brand" href="{route(prefix,'')}" aria-label="New Dawn ブログのトップ"><img src="{prefix}/assets/brand/logo.png" alt="" width="42" height="42"><span>New Dawn<small>園芸療法 × 幸福学</small></span></a>
 <nav class="main-nav" aria-label="メインナビゲーション"><a href="{route(prefix,'')}"{(' aria-current="page"' if active == 'all' and not article else '')}>すべての記事</a>{nav}<a class="official" href="{MAIN}">公式サイトへ <span aria-hidden="true">↗</span></a></nav>
 </div></header>
 <main id="main">{content}</main>
-<footer class="site-footer"><div class="footer-inner"><div><a class="footer-brand" href="{route(prefix,'')}">New Dawn</a><p>園芸療法と幸福学をめぐる、実践と研究の記録。</p></div><a href="{MAIN}" class="footer-link">New Dawn 公式サイトへ <span aria-hidden="true">↗</span></a></div><div class="footer-bottom"><span>© New Dawn</span><a href="{prefix}/feed.xml">RSSで購読</a><a href="#">ページの先頭へ ↑</a></div></footer></body></html>'''
+<footer class="site-footer"><div class="footer-inner"><div><a class="footer-brand" href="{route(prefix,'')}"><img src="{prefix}/assets/brand/logo.png" alt="" width="36" height="36">New Dawn</a><p>園芸療法と幸福学をめぐる、実践と研究の記録。</p></div><a href="{MAIN}" class="footer-link">New Dawn 公式サイトへ <span aria-hidden="true">↗</span></a></div><div class="footer-bottom"><span>© New Dawn</span><a href="{prefix}/feed.xml">RSSで購読</a><a href="#">ページの先頭へ ↑</a></div></footer></body></html>'''
 
 def category_pill(post, prefix):
     return f'<a class="pill {post["category"]}" href="{route(prefix,"categories/" + post["category"] + "/")}">{CATEGORIES[post["category"]]}</a>'
@@ -128,10 +139,12 @@ def category_pill(post, prefix):
 def post_card(post, prefix='.', extra=''):
     url = route(prefix, 'posts/' + post['slug'] + '/')
     theme = {'activity':'plant','research':'research','column':'story'}[post['category']]
+    visual = post.get('cover_image', 'assets/' + theme + '.svg')
+    photo_class = ' photo' if post.get('cover_image') else ''
     author = H(post['author']) if post['author'] else 'New Dawn'
     label = 'しめ縄づくり' if post['slug'] == 'shimenawa-workshop' else ('春の寄せ植えとハーブティー' if post['slug'] == 'spring-planting-and-herbal-tea' else '')
     search = H(post['title']+' '+post['description']+' '+label+' '+CATEGORIES[post['category']],quote=True)
-    return f'''<article class="post-card {extra}" data-search="{search}"><a class="card-visual {theme}" href="{url}" tabindex="-1" aria-hidden="true"><img src="{prefix}/assets/{theme}.svg" alt="" width="600" height="360" loading="lazy"></a><div class="card-body"><div class="card-meta">{category_pill(post,prefix)}<time datetime="{post['date']}">{date_label(post['date'])}</time></div><h3><a href="{url}">{H(post['title'])}</a></h3>{f'<p class="card-subtitle">{label}</p>' if label else ''}<p class="card-description">{H(post['description'])}</p><div class="card-bottom"><span>{author} · 約{post['minutes']}分</span><a class="read-link" href="{url}" aria-label="{H(post['title'],quote=True)}を読む">記事を読む <span aria-hidden="true">→</span></a></div></div></article>'''
+    return f'''<article class="post-card {extra}" data-search="{search}"><a class="card-visual {theme}{photo_class}" href="{url}" tabindex="-1" aria-hidden="true"><img src="{prefix}/{visual}" alt="" width="600" height="360" loading="lazy"></a><div class="card-body"><div class="card-meta">{category_pill(post,prefix)}<time datetime="{post['date']}">{date_label(post['date'])}</time></div><h3><a href="{url}">{H(post['title'])}</a></h3>{f'<p class="card-subtitle">{label}</p>' if label else ''}<p class="card-description">{H(post['description'])}</p><div class="card-bottom"><span>{author} · 約{post['minutes']}分</span><a class="read-link" href="{url}" aria-label="{H(post['title'],quote=True)}を読む">記事を読む <span aria-hidden="true">→</span></a></div></div></article>'''
 
 def index_content(category=None):
     prefix = '.' if category is None else '../..'
@@ -140,7 +153,10 @@ def index_content(category=None):
         featured = posts[0]
         featured_title = '春の寄せ植えと<br>ハーブティーの時間' if featured['slug'] == 'spring-planting-and-herbal-tea' else H(featured['title'])
         featured_art = {'activity': 'plant', 'research': 'research', 'column': 'story'}[featured['category']]
-        hero = f'''<section class="hero wrap"><div class="hero-copy"><p class="eyebrow"><span class="tiny-leaf" aria-hidden="true"></span> New Dawn のブログ</p><h1>植物と、人のあいだに。<br><span>小さな変化を、記録する。</span></h1><p class="hero-description">植物に触れる時間に生まれる、言葉や気づき。<br>園芸療法の実践と、幸福学をめぐる研究を綴ります。</p><a href="#articles" class="button primary">記事を読む <span aria-hidden="true">↓</span></a></div><a href="./posts/{featured['slug']}/" class="featured"><div class="featured-art"><img src="./assets/{featured_art}.svg" width="600" height="360" alt="植物と記録を表すイラスト"></div><div class="featured-copy"><div class="featured-meta"><span>最新の記事</span><time datetime="{featured['date']}">{date_label(featured['date'])}</time></div><h2>{featured_title}</h2><span class="featured-link">記事を読む <span aria-hidden="true">→</span></span></div></a></section>'''
+        featured_visual = featured.get('cover_image', 'assets/' + featured_art + '.svg')
+        featured_photo_class = ' photo' if featured.get('cover_image') else ''
+        featured_alt = H(featured.get('cover_alt', '植物と記録を表すイラスト'),quote=True)
+        hero = f'''<div class="brand-hero"><section class="hero wrap"><div class="hero-copy"><p class="eyebrow">Horticultural therapy × well-being</p><h1>New Dawn<br><span>活動と研究のブログ</span></h1><p class="hero-description">明日を照らす、新しい評価のかたち。<br>園芸療法の実践と、幸福学をめぐる研究を綴ります。</p><a href="#articles" class="button primary">記事を読む <span aria-hidden="true">↓</span></a></div><a href="./posts/{featured['slug']}/" class="featured"><div class="featured-art{featured_photo_class}"><img src="./{featured_visual}" width="600" height="360" alt="{featured_alt}"></div><div class="featured-copy"><div class="featured-meta"><span>最新の記事</span><time datetime="{featured['date']}">{date_label(featured['date'])}</time></div><h2>{featured_title}</h2><span class="featured-link">記事を読む <span aria-hidden="true">→</span></span></div></a></section></div>'''
         intro = '実践の記録から、研究のこと、私たちの原点まで。'
         title = '記事一覧'
     else:
@@ -150,7 +166,7 @@ def index_content(category=None):
     filters = f'<a href="{route(prefix,"")}#articles" class="filter'+(' selected' if not category else '')+'"'+(' aria-current="page"' if not category else '')+f'>すべて <span>{len(posts)}</span></a>'
     filters += ''.join(f'<a href="{route(prefix,"categories/"+key+"/")}" class="filter'+(' selected' if category==key else '')+'"'+(' aria-current="page"' if category==key else '')+f'>{label} <span>{sum(p["category"]==key for p in posts)}</span></a>' for key,label in CATEGORIES.items())
     cards=''.join(post_card(p,prefix) for p in selected)
-    return hero + f'''<section class="article-section wrap" id="articles"><div class="section-heading"><div><p class="eyebrow">実践・研究・コラム</p><h2>{title}</h2><p>{intro}</p></div><form class="search-form" role="search"><label for="article-search" class="sr-only">表示中の記事を検索</label><span aria-hidden="true">⌕</span><input id="article-search" type="search" placeholder="記事を探す" autocomplete="off"><button type="reset" aria-label="検索をクリア">×</button></form></div><div class="article-toolbar"><nav class="filters" aria-label="記事のカテゴリ">{filters}</nav><span class="result-count" role="status" aria-live="polite">{len(selected)}件の記事</span></div><div class="card-grid">{cards}</div><p class="empty-state" hidden>一致する記事がありません。別の言葉で検索してください。</p></section><section class="about-strip wrap"><div class="about-mark" aria-hidden="true">N<span>ew Dawn</span></div><div><h2>小さな幸せを、見つめる。</h2><p>New Dawnは、園芸療法と幸福学を軸に、<br class="desktop-break">評価法の研究・普及・教育・実践に取り組んでいます。</p></div><a href="{MAIN}" class="button secondary">New Dawnについて <span aria-hidden="true">↗</span></a></section>'''
+    return hero + f'''<section class="article-section wrap" id="articles"><div class="section-heading"><div><p class="eyebrow">実践・研究・コラム</p><h2>{title}</h2><p>{intro}</p></div><form class="search-form" role="search"><label for="article-search" class="sr-only">表示中の記事を検索</label><span aria-hidden="true">⌕</span><input id="article-search" type="search" placeholder="記事を探す" autocomplete="off"><button type="reset" aria-label="検索をクリア">×</button></form></div><div class="article-toolbar"><nav class="filters" aria-label="記事のカテゴリ">{filters}</nav><span class="result-count" role="status" aria-live="polite">{len(selected)}件の記事</span></div><div class="card-grid">{cards}</div><p class="empty-state" hidden>一致する記事がありません。別の言葉で検索してください。</p></section><section class="about-strip wrap"><img class="about-logo" src="{prefix}/assets/brand/logo.png" alt="" width="68" height="68"><div><h2>小さな幸せを、見つめる。</h2><p>New Dawnは、園芸療法と幸福学を軸に、<br class="desktop-break">評価法の研究・普及・教育・実践に取り組んでいます。</p></div><a href="{MAIN}" class="button secondary">New Dawnについて <span aria-hidden="true">↗</span></a></section>'''
 
 (OUT/'index.html').write_text(document('ブログ', 'New Dawnの活動報告、研究、コラム。園芸療法と幸福学をめぐる実践と研究の記録を届けます。', index_content()))
 for category, label in CATEGORIES.items():
