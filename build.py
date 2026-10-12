@@ -2,6 +2,7 @@
 import argparse
 import datetime as dt
 import html
+import hashlib
 import json
 import math
 import re
@@ -19,6 +20,7 @@ args_parser.add_argument('--preview', action='store_true')
 args = args_parser.parse_args()
 SITE = args.site_url.rstrip('/')
 H = html.escape
+STYLE_FILE = 'style-' + hashlib.sha256((ROOT/'assets/style.css').read_bytes()).hexdigest()[:12] + '.css'
 PHOTO_METADATA = {p['file']: p for p in json.loads((ROOT/'photo-migration.json').read_text())} if (ROOT/'photo-migration.json').exists() else {}
 
 def inline(text):
@@ -94,6 +96,7 @@ for old in OUT.iterdir():
 for path in (ROOT / 'assets').iterdir():
     if path.is_dir(): shutil.copytree(path, OUT / 'assets' / path.name)
     else: shutil.copy2(path, OUT / 'assets' / path.name)
+shutil.copyfile(ROOT/'assets/style.css', OUT/'assets'/STYLE_FILE)
 
 def date_label(value):
     d = dt.date.fromisoformat(value)
@@ -125,7 +128,7 @@ def document(title, description, content, prefix='.', path='', active='all', art
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{H(title)}｜New Dawn</title><meta name="description" content="{H(description, quote=True)}">
 <meta name="theme-color" content="#005b5b"><meta property="og:type" content="{'article' if article else 'website'}"><meta property="og:title" content="{H(title, quote=True)}｜New Dawn"><meta property="og:description" content="{H(description, quote=True)}"><meta property="og:locale" content="ja_JP"><meta property="og:site_name" content="New Dawn ブログ">
-{meta}<link rel="icon" href="{prefix}/assets/brand/favicon.png" type="image/png"><link rel="apple-touch-icon" href="{prefix}/assets/brand/logo.png"><link rel="stylesheet" href="{prefix}/assets/style.css"><script src="{prefix}/assets/app.js" defer></script>{structured}</head>
+{meta}<link rel="icon" href="{prefix}/assets/brand/favicon.png" type="image/png"><link rel="apple-touch-icon" href="{prefix}/assets/brand/logo.png"><link rel="stylesheet" href="{prefix}/assets/{STYLE_FILE}"><script src="{prefix}/assets/app.js" defer></script>{structured}</head>
 <body><a class="skip-link" href="#main">本文へ進む</a>{preview}<header class="site-header"><div class="header-inner">
 <a class="brand" href="{route(prefix,'')}" aria-label="New Dawn ブログのトップ"><img src="{prefix}/assets/brand/logo.png" alt="" width="42" height="42"><span>New Dawn<small>園芸療法 × 幸福学</small></span></a>
 <nav class="main-nav" aria-label="メインナビゲーション"><a href="{route(prefix,'')}"{(' aria-current="page"' if active == 'all' and not article else '')}>すべての記事</a>{nav}<a class="official" href="{MAIN}">公式サイトへ <span aria-hidden="true">↗</span></a></nav>
