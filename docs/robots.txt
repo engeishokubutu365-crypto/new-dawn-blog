@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://engeishokubutu365-crypto.github.io/new-dawn-blog/sitemap.xml
